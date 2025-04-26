@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tracking App</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="shortcut icon" href="/img/logo.png" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <div class="add-box">
+            <div class="add-title">
+                <span>Edit Book</span>
+            </div>
+            <div class="formdata">
+                <% data.map((item) =>{ %>
+                    <form action="/update/<%= item.id %>/<%= item.book %>" method="post" enctype="multipart/form-data">
+                        <label for="title">Title</label>
+                        <input type="text" name="title" id="title" value="<%= item.title %>" placeholder="Eg: Java Programming">
+                        <label for="author">Author</label>
+                        <input type="text" name="author" id="author" value="<%= item.author %>" placeholder="Eg: John Doe">
+                        <label for="year">Year</label>
+                        <input type="text" name="year" id="year" value="<%= item.year %>" placeholder="Eg: 2023">
+                        <label for="books">Book PDF (less then 1MB)</label>
+                        <input type="file" name="books" id="books" accept=".pdf">
+                        <div class="current-file">
+                            <p>Current File: 
+                              <a href="/<%= item.book %>" target="_blank"><%= item.book.substring(14,23) %>.pdf</a>
+                            </p>
+                          </div>
+                        <div class="btn">
+                            <button type="submit">Update</button>
+                        </div>
+                    </form>
+               <% }) %>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

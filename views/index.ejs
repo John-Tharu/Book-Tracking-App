@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tracking App</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://kit.fontawesome.com/bb7a749298.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="/img/logo.png" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <div class="title">
+                <span><img src="/img/logo.png" alt="Logo">Book Tracking App</span>
+                <form action="/search" method="post">
+                    <div class="search">
+                        <a href="/add"><i class="fa-solid fa-plus"></i></a>
+                        <input type="text" placeholder="Title, Author....." name="search" id="search">
+                        <button>Search</button>
+                    </div>
+                </form>
+            </div>
+            <div class="filter">
+                <span><%= counts %> Books Avaliable</span>
+                <!--<form action="" method="post">
+                    <span>Sort By</span>
+                    <select name="filter" id="filter" id="filter">
+                        <option value="all">All</option>
+                        <option value="read">Read</option>
+                        <option value="unread">Unread</option>
+                    </select>
+                </form>
+                <div class="status">
+                    <span>Read</span>
+                    <button><i class="fa-solid fa-book-open" style="color: yellow;"></i></button>
+                    <span>Unread</span>
+                    <button><i class="fa-solid fa-book-open""></i></button>
+                </div>-->
+            </div>
+            <div class="content">
+                <%
+                let count = 0;
+                datas.map((item) =>{
+                    count++;
+                    if (item.status == "Read") {
+                        item.status = '<i class="fa-solid fa-book-open" style="color: yellow;"></i>';
+                    } else if (item.status == "Unread") {
+                        item.status = '<i class="fa-solid fa-book-open"></i>';
+                    } else {
+                        item.status = "Unknown";
+                    }
+                     %>
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="/pdf/<%= item.id %>"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="Image" srcset=""></a>
+                        </div>
+                        <div class="card-body">
+                            <a href="/pdf/<%= item.id %>"><h3><%= item.title %></h3></a>
+                            <p><i class="fa-solid fa-user"></i> <%= item.author %></p>
+                            <p><i class="fa-solid fa-calendar-days"></i> <%= item.year %></p>
+                            <a href="/status/<%= item.id %>" title="Status"><button><%- item.status %></button></a>
+                            <a href="/edit/<%= item.id %>" title="Edit"><button><i class="fa-solid fa-pen-to-square"></i></button></a>
+                            <a href="/del/<%= item.id %>/<%= item.book %>" title="Delete"><button><i class="fa-solid fa-trash"></i></button></a>
+                        </div>
+                    </div>
+               <% }) %>
+            </div>
+        </div>
+    </div>
+    <div id="toastBox"></div>
+    <script>
+    let toastBox = document.getElementById("toastBox");
+        let successMsg = `<i class="fa-solid fa-circle-check"></i> Successfully Submitted!`;
+        let errorMsg = '<i class="fa-solid fa-circle-xmark"></i> Error! Please try again.';
+        let invalidMsg = '<i class="fa-solid fa-circle-exclamation"></i> Invalid! Please check your input.';
+        let noFile = '<i class="fa-solid fa-circle-exclamation"></i> Invalid! File not found !!';
+        let invalidYear = '<i class="fa-solid fa-circle-exclamation"></i> Invalid! Enter valid year !!';
+
+
+        const params = new URLSearchParams(window.location.search);
+        const message = params.get('msg');
+
+       if(message){
+        if (message.includes('success')) {
+        showToast(successMsg); // Output: Book added successfully
+        } else if (message.includes('error')) {
+            showToast(errorMsg); // Output: Error! Please try again.
+        } else if (message.includes('invalid')) {
+            showToast(invalidMsg); // Output: Invalid! Please check your input.
+        } else if (message.includes('noFile')) {
+            showToast(noFile); // Output: Invalid! File not found !!
+        } else if (message.includes('deleted')) {
+            showToast('<i class="fa-solid fa-circle-check"></i> Book Deleted Successfully!'); // Output: Book deleted successfully
+        } else if (message.includes('updated')) {
+            showToast('<i class="fa-solid fa-circle-check"></i> Book Updated Successfully!'); // Output: Book updated successfully
+        }
+        else if(message.includes('Read')){
+            showToast('<i class="fa-solid fa-circle-check"></i> Book Status Updated to Unead!'); // Output: Book status updated to read
+        }
+        else if(message.includes('Unread')){
+            showToast('<i class="fa-solid fa-circle-check"></i> Book Status Updated to Read!'); 
+        }
+        else if(message.includes('noYear')){
+            showToast(invalidYear); // Output: Book not found
+        }
+         else {
+            showToast(`<i class="fa-solid fa-circle-exclamation"></i> Error! ${message}`); // Output: Any other message
+    }
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+       }
+
+        function showToast(msg){
+            let toast = document.createElement("div");
+            toast.classList.add("toast");
+            toast.innerHTML = msg;
+            toastBox.appendChild(toast);
+
+            if(msg.includes("Error")){
+                toast.classList.add("error");
+            }
+            if(msg.includes("Invalid")){
+                toast.classList.add("invalid");
+            }
+
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
