@@ -55,10 +55,15 @@ Visit your app
 1. http://localhost:5000/
 
 📢 Important Notes
+
 File uploads are limited to 1MB max.
+
 Only PDF files are allowed for upload.
+
 Make sure MySQL server is running before starting the app.
+
 I am using Drizzle ORM so before run the program setup generate, migration accordingly first.
+
 
 🤝 Contributing
 Pull requests are welcome! Feel free to open an issue or suggest improvements.
